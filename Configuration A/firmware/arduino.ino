@@ -12,11 +12,13 @@
 
 #include <ArduinoJson.h>
 
+//D pins as referenced by NodeMCU V3 silk screen
+//Unique to this dev board, so cross-reference your pins!
 #define BUTTON_PIN 16 // D0
 
-#define POWER_PIN 14 // D5
-#define ERROR_PIN 15  // D8
-#define STATUS_PIN 13 // D7
+#define POWER_PIN 4 // D2
+#define ERROR_PIN 5  // D1
+#define STATUS_PIN 2 // D4
 
 #define BLINK_DELAY 250
 #define CONNECTION_RETRIES 50
@@ -36,17 +38,18 @@ int tool_armed = 0;
 int block_retry = 1;
 
 void setup() {
-  Serial.begin(115200);
-  delay(10);
-
   // prepare STATUS_PIN
   pinMode( POWER_PIN, OUTPUT );
   pinMode( STATUS_PIN, OUTPUT );
   pinMode( ERROR_PIN, OUTPUT );
-  pinMode( BUTTON_PIN, INPUT );
+  pinMode( BUTTON_PIN, INPUT_PULLDOWN_16 );
 
   // Clean up
   setOff();
+
+  // Start Serial
+  Serial.begin(115200);
+  delay(10);
 
   // Block trying to arm in case switch was accidentally left on
   block_retry = 1;
