@@ -103,6 +103,7 @@ void loop() {
     while ( WiFi.status() != WL_CONNECTED && connection_tries < 20 ) {
       Serial.printf( "." );
       delay(250);
+      connection_tries++;
     }
     if( WiFi.status() != WL_CONNECTED ) {
       setError();
