@@ -99,9 +99,15 @@ void loop() {
     WiFi.begin( ssid, password );
 
     // Wait for connection
-    while ( WiFi.status() != WL_CONNECTED ) {
+    int connection_tries = 0;
+    while ( WiFi.status() != WL_CONNECTED && connection_tries < 20 ) {
       Serial.printf( "." );
       delay(250);
+    }
+    if( WiFi.status() != WL_CONNECTED ) {
+      setError();
+      Serial.printf( "\nERROR: Failed to connect to wireless network\n" );
+      return;
     }
     Serial.printf( "ONLINE!\n" );
 
