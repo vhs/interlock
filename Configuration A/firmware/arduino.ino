@@ -18,8 +18,11 @@
 #define ERROR_PIN 15  // D8
 #define STATUS_PIN 13 // D7
 
-#define DEBOUNCE_DELAY 50
 #define BLINK_DELAY 250
+#define CONNECTION_RETRIES 50
+#define DEBOUNCE_DELAY 50
+#define LOOP_DELAY 500
+#define NETWORK_DELAY 500
 
 const char *ssid = "<SSID>";
 const char *password = "<PASSWORD>";
@@ -100,20 +103,22 @@ void loop() {
 
     // Wait for connection
     int connection_tries = 0;
-    while ( WiFi.status() != WL_CONNECTED && connection_tries < 20 ) {
+    while ( WiFi.status() != WL_CONNECTED && connection_tries < CONNECTION_RETRIES ) {
       Serial.printf( "." );
       delay(250);
       connection_tries++;
     }
     if( WiFi.status() != WL_CONNECTED ) {
+      Serial.printf( "\n" );
       setError();
-      Serial.printf( "\nERROR: Failed to connect to wireless network\n" );
+      Serial.printf( "ERROR: Failed to connect to wireless network\n" );
       return;
+    } else {
+      Serial.printf( "ONLINE!\n" );
     }
-    Serial.printf( "ONLINE!\n" );
 
     // Wait for network to come up
-    delay( 500 );
+    delay( NETWORK_DELAY );
 
     Serial.printf( "LOG: Getting status from server\n" );
     String payload = getDeviceStatus();
@@ -169,7 +174,7 @@ void loop() {
     setError();
   }
 
-  delay( 1000 );
+  delay( LOOP_DELAY );
 }
 
 void setOff() {
