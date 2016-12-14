@@ -29,7 +29,7 @@ const char *baseURL = "<Base URL without endpoints>"; // Include trailing "/"
 
 String fingerprint = "<SHA-1 fingerprint (thumbprint) for the server certificate (including spaces)>";
 
-int tool_unsafe = 0;
+int tool_armed = 0;
 int block_retry = 1;
 
 void setup() {
@@ -85,7 +85,7 @@ void loop() {
   int button_status = digitalRead( BUTTON_PIN );
 
   // If the button is on, tool is unsafe and we're not blocked from trying, turn it on
-  if ( button_status == HIGH && tool_unsafe == 0 && block_retry == 0 ) {
+  if ( button_status == HIGH && tool_armed == 0 && block_retry == 0 ) {
     delay( DEBOUNCE_DELAY );
     if ( button_status != HIGH ) {
       return;
@@ -120,10 +120,10 @@ void loop() {
     }
 
     // Get state from the data
-    tool_unsafe = (int) root["state"]["powered"];
+    tool_armed = (int) root["state"]["powered"];
 
     // Switch on, else set error
-    if ( tool_unsafe == 1 ) {
+    if ( tool_armed == 1 ) {
       setOn();
     } else {
       setError();
@@ -135,7 +135,7 @@ void loop() {
   }
 
   // If button is off and the tool was on, switch it off
-  if ( button_status == LOW && tool_unsafe == 1 ) {
+  if ( button_status == LOW && tool_armed == 1 ) {
     delay( DEBOUNCE_DELAY );
     if ( button_status != LOW ) {
       return;
@@ -145,7 +145,7 @@ void loop() {
   }
 
   // If switch is off, tool is safe and retry is blocked, clear errors
-  if ( button_status == LOW && tool_unsafe == 0 && block_retry == 1 ) {
+  if ( button_status == LOW && tool_armed == 0 && block_retry == 1 ) {
     delay( DEBOUNCE_DELAY );
     if ( button_status != LOW ) {
       return;
@@ -154,7 +154,7 @@ void loop() {
   }
 
   // If switch is on, but we're blocked from retrying, set error
-  if ( button_status == HIGH && tool_unsafe == 0 && block_retry == 1 ) {
+  if ( button_status == HIGH && tool_armed == 0 && block_retry == 1 ) {
     delay( DEBOUNCE_DELAY );
     if ( button_status != HIGH ) {
       return;
@@ -167,7 +167,7 @@ void loop() {
 
 void setOff() {
   digitalWrite( POWER_PIN, LOW );
-  tool_unsafe = 0;
+  tool_armed = 0;
   digitalWrite( STATUS_PIN, LOW );
   Serial.printf( "NOTICE: Tool disabled\n" );
   clearError();
