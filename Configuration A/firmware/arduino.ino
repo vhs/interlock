@@ -65,7 +65,7 @@ String getDeviceStatus() {
 }
 
 String doGetServerRequest( String endpoint ) {
-  String requestURL = String( (String) baseURL + endpoint + "?id=" + (String)deviceID );
+  String requestURL = String( (String) baseURL + endpoint + "/" + (String)deviceID );
   
   HTTPClient http;
   http.begin( requestURL, fingerprint );
