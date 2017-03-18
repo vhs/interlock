@@ -30,9 +30,9 @@ const char *ssid = "<SSID>";
 const char *password = "<PASSWORD>";
 
 const char *deviceID = "<Device Identifier>";
-const char *baseURL = "<Base URL without endpoints>"; // Include trailing "/"
+const char *baseURL = "https://atoms.vanhack.ca/devices/"; // Include trailing "/"
 
-String fingerprint = "<SHA-1 fingerprint (thumbprint) for the server certificate (including spaces)>";
+String fingerprint = "58 EB 91 81 5F B9 36 3B 17 0D 86 79 55 10 96 90 CB C8 11 92";
 
 int tool_armed = 0;
 int block_retry = 1;
